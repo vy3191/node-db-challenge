@@ -4,7 +4,13 @@ const resourceModel = require("../models/resource-model");
 
 router.get("/", async (req,res,next) => {
    try {
-      res.status(200).json(await resourceModel.findResources())
+      const resouces = await resourceModel.findResources();
+      const mappedResouces = resouces.map( (resouce) => {
+            if(resouce.completed === 1) resouce.completed = true;
+            if(resouce.completed === 0) resouce.completed = false;
+            return resouce;
+      })
+      res.status(200).json(mappedResouces);
    }catch(error) {
      next(error);
    }

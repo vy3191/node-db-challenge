@@ -4,7 +4,16 @@ const taskModel = require("../models/task-model");
 
 router.get("/", async (req,res,next) => {
    try {
-      res.status(200).json(await taskModel.findTasks())
+      const tasks =await taskModel.findTasks();
+      const mappedTasks = tasks.map( (task) => {
+          if(task.completed === 1) {
+              task.completed = true;
+          } else {
+              task.completed = false;
+          }
+          return task;
+      })
+      res.status(200).json(mappedTasks);
    }catch(error) {
      next(error);
    }
